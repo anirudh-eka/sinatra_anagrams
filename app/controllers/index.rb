@@ -3,9 +3,11 @@ get '/' do
   erb :index
 end
 
-post '/anagram' do
-  params[:user_input]
-  word = Word.where('word=?', params[:user_input]).first
-  @anagrams = word.anagrams if word
+
+post '/' do
+  input = params[:user_input]
+  input = input.downcase.split('').sort.join
+  @anagrams = []
+  Word.where(sorted_letters: input).each {|sorted| @anagrams << sorted.word}
   erb :index
 end
